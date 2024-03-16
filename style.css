@@ -36,3 +36,13 @@ header{
 .menu{
     background-color: rgb(241, 241, 241);
 }
+main{
+    margin-bottom: 100px;
+}
+footer{
+    height: 100px;
+}
+footer div{
+    margin-top: 35px;
+    color: white;
+}
