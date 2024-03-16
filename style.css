@@ -1,3 +1,6 @@
+body{
+    background-color: rgb(241, 241, 241);
+}
 .logo-img{
     height: 120px;
     width: 120px;
@@ -29,4 +32,7 @@ header{
 }
 .descricao{
     font-size: 14px;
+}
+.menu{
+    background-color: rgb(241, 241, 241);
 }
