@@ -86,6 +86,19 @@ header{
 .remove-item:hover{
     text-decoration: underline;
 }
+.addSucess{
+    height: 30px;
+    background-color: rgb(0, 173, 0);
+    position: fixed;
+    top: 0;
+    right: 0;
+    color: white;
+    transition: 0.5s;
+}
+.resumo-itens h6, .resumo-itens p{
+    margin: 0;
+    padding: 0;
+}
 footer{
     height: 100px;
     cursor: pointer;
