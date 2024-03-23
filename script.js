@@ -22,97 +22,111 @@ function fazerPedido() {
 }
 
 let carrinho = []
-const addItemCarrinho = document.querySelectorAll(".add-item-cart")
-addItemCarrinho.forEach(itens => {
-    itens.addEventListener("click", () => {
-        let nome = itens.parentNode.parentNode.querySelector(".nome").textContent
-        let preco = itens.parentNode.parentNode.querySelector(".preco").textContent
-        let item = {
-            nome: nome,
-            preco: preco,
-            quantidade: 1
-        }
-        let addSucess = document.querySelector(".addSucess")
+
+class newItem {
+    constructor(nome, precoFixo) {
+        this.nome = nome,
+        this.precoFixo = precoFixo,
+        this.quantidade = 1,
+        this.total = precoFixo
+    }
+
+    valorTotal() {
+        this.total = this.precoFixo * this.quantidade;
+    }
+
+    addQuantidade() {
+        this.quantidade += 1
+    }
+}
+
+const criarItem = document.querySelectorAll(".add-item-cart")
+
+criarItem.forEach(itemClicado => {
+    itemClicado.addEventListener("click", criarItemCarrinho)
+});
+
+function criarItemCarrinho() {
+    let item = this.parentNode.parentNode
+    let nome = item.querySelector(".nome")
+    let precoFixo = item.querySelector(".preco")
+    let addItem = new newItem(nome.textContent, precoFixo.textContent)
+    let qtdItemCarrinhoElement = document.querySelector("#quantidade-item");
+    let qtdItemCarrinho = Number(qtdItemCarrinhoElement.textContent);
+    let somarQuantidade = qtdItemCarrinho + 1;
+    qtdItemCarrinhoElement.textContent = `${somarQuantidade}`;
+    let itemExistente = carrinho.find((element) => element.nome === nome.textContent)
+    let addSucess = document.querySelector(".addSucess")
         addSucess.classList.remove("hide-cart")
         setTimeout(() => {
             addSucess.classList.add("hide-cart")
         }, 1000)
-        addItem(item)
-    })
-});
-
-function addItem(item) {
-    let qtdItensCarrinho = document.querySelector("#quantidade-item")
-    let qtdItens = 0
-    let index = carrinho.findIndex(element => {
-        return element.nome === item.nome
-    });
-    if (index !== -1) {
-        carrinho[index].quantidade++;
-        editModal(carrinho[index])
-    } else {
-        carrinho.push(item);
-        editModal(item)
-    }
-    for (let i = 0; i < carrinho.length; i++) {
-        qtdItens += carrinho[i].quantidade
-        qtdItensCarrinho.innerText = `${qtdItens}`
+    if(itemExistente){
+        itemExistente.addQuantidade()  
+        itemExistente.valorTotal()
+        verificarListaDeItens(itemExistente)
+    }else{
+        const divItens = document.querySelector("#itens")
+        carrinho.push(addItem)
+        criarHTML(addItem)
+        valorTotal(divItens)
     }
 }
 
-function editModal(item){
-    let todosItens = document.querySelector("#items")
+function verificarListaDeItens(item) {
+    const divItens = document.querySelector("#itens")
+    let itens = divItens.querySelectorAll(".resumo-itens .nome-item")
+    itens.forEach(element => {
+        if(element.textContent == item.nome){
+            element.parentNode.querySelector(".quantidade").innerText = `${item.quantidade}`
+            element.parentNode.querySelector(".total-item").innerText = `${item.total.toFixed(2)}`
+            valorTotal(divItens)
+        }
+})
+}
+
+function criarHTML(item){
+    
+    const addHTML = document.querySelector("#itens")
     let divContainer = document.createElement("div")
     let divText = document.createElement("div")
-    divText.classList.add("resumo-itens")
-    let hName = document.createElement("h6")
-    hName.classList.add("items-selecionados")
+    let hNome = document.createElement("h6")
+    hNome.classList.add("nome-item")
     let hPreco = document.createElement("h6")
-    hPreco.classList.add("preco-do-item")
+    hPreco.classList.add("total-item")
     let pQuantidade = document.createElement("p")
-    pQuantidade.innerText = "Quantidade:"
     let spanQuantidade = document.createElement("span")
-    spanQuantidade.classList.add("quantidade-de-itens")
+    spanQuantidade.classList.add("quantidade")
     let btnRemove = document.createElement("button")
-    btnRemove.innerText = "Remover"
-    btnRemove.classList.add("remove-item")
-    let nomesItensCarrinho = document.querySelectorAll(".items-selecionados")
-    let quantidadeDeItens = document.querySelectorAll(".quantidade-de-itens")
-    let precoDosItens = document.querySelectorAll("preco-do-item")
-
-    divContainer.classList.add("d-flex", "justify-content-between", "align-items-center")
+    
+    divContainer.classList.add("d-flex", "justify-content-between")
     divContainer.appendChild(divText)
     divContainer.appendChild(btnRemove)
-    divText.appendChild(hName)
+    divText.appendChild(hNome)
     divText.appendChild(pQuantidade)
+    pQuantidade.innerText = "Quantidade: "
     pQuantidade.appendChild(spanQuantidade)
+    divText.classList.add("resumo-itens")
     divText.appendChild(hPreco)
+    btnRemove.innerText = "remover"
+    btnRemove.classList.add("remove-item")
 
-    let infoDavalidacao = validarNome(item.nome, nomesItensCarrinho)
+    hNome.innerText = `${item.nome}`
+    spanQuantidade.innerText = `${item.quantidade}`
+    hPreco.innerText = `R$ ${item.total}`
 
-    if(infoDavalidacao == false || infoDavalidacao == undefined){
-        hName.innerText = `${item.nome}`
-        spanQuantidade.innerText = `    ${item.quantidade} `
-        hPreco.innerText = `R$ ${item.preco}`
-        todosItens.appendChild(divContainer)
-    }else{
-        for(let i = 0; i < nomesItensCarrinho.length; i++){
-            if(item.nome == nomesItensCarrinho[i].textContent){
-                let numeroDeItens = Number(quantidadeDeItens[i].textContent)
-                numeroDeItens++
-                quantidadeDeItens[i].textContent = `${numeroDeItens}`
-            }
-        }
-    }
+
+    addHTML.appendChild(divContainer)
 }
 
-function validarNome(item, nomesItensCarrinho){
-    
-    for(let i = 0; i < nomesItensCarrinho.length; i++){
-        if(item === nomesItensCarrinho[i].textContent){
-            return true
-        }else{
-            return false
-        }
+function valorTotal(itens){
+    let total = 0;
+    let totalDosItens = itens.querySelectorAll(".total-item");
+    for(let i = 0; i < totalDosItens.length; i++){
+        let textoTotal = totalDosItens[i].textContent;
+        // Removendo o prefixo "R$" e convertendo para número
+        let valorNumerico = parseFloat(textoTotal.replace("R$", "").trim()); // Remove "R$" e espaços em branco e converte para número
+        total += valorNumerico;
     }
+    document.querySelector("#total-carrinho").innerText = `${total.toFixed(2)}`
 }
