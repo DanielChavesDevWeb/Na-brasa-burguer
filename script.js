@@ -23,6 +23,21 @@ function fazerPedido() {
 
 let carrinho = []
 
+function qtdItemCarrinho(span){
+    let totalItens = 1
+        for(element of carrinho){
+            totalItens += element.quantidade
+        }
+    span.textContent = `${totalItens}`
+}
+function atualizarQtdItemCarrinho(span) {
+    let totalItens = 0
+    for(element of carrinho){
+        totalItens += element.quantidade
+    }
+    span.textContent = `${totalItens}`
+}
+
 class newItem {
     constructor(nome, precoFixo) {
         this.nome = nome,
@@ -51,10 +66,8 @@ function criarItemCarrinho() {
     let nome = item.querySelector(".nome")
     let precoFixo = item.querySelector(".preco")
     let addItem = new newItem(nome.textContent, precoFixo.textContent)
-    let qtdItemCarrinhoElement = document.querySelector("#quantidade-item");
-    let qtdItemCarrinho = Number(qtdItemCarrinhoElement.textContent);
-    let somarQuantidade = qtdItemCarrinho + 1;
-    qtdItemCarrinhoElement.textContent = `${somarQuantidade}`;
+    let spanQuantidadeItens = document.querySelector("#quantidade-item");
+    qtdItemCarrinho(spanQuantidadeItens)
     let itemExistente = carrinho.find((element) => element.nome === nome.textContent)
     let addSucess = document.querySelector(".addSucess")
         addSucess.classList.remove("hide-cart")
@@ -117,6 +130,11 @@ function criarHTML(item){
 
 
     addHTML.appendChild(divContainer)
+
+    const btnRemoverItem = document.querySelectorAll(".remove-item")
+    btnRemoverItem.forEach(element => {
+    element.addEventListener("click", removerItem)
+})
 }
 
 function valorTotal(itens){
@@ -124,9 +142,34 @@ function valorTotal(itens){
     let totalDosItens = itens.querySelectorAll(".total-item");
     for(let i = 0; i < totalDosItens.length; i++){
         let textoTotal = totalDosItens[i].textContent;
-        // Removendo o prefixo "R$" e convertendo para número
-        let valorNumerico = parseFloat(textoTotal.replace("R$", "").trim()); // Remove "R$" e espaços em branco e converte para número
+        let valorNumerico = parseFloat(textoTotal.replace("R$", "").trim()); 
         total += valorNumerico;
     }
     document.querySelector("#total-carrinho").innerText = `${total.toFixed(2)}`
+    console.log(carrinho);
 }
+
+function removerItem(){
+    const todosItens = document.querySelector("#itens");
+    let item = this.parentNode;
+    let nomeItem = item.querySelector(".nome-item").textContent;
+
+    // Encontra o índice do item no array carrinho
+    let indiceItem = carrinho.findIndex(itemCarrinho => itemCarrinho.nome === nomeItem);
+
+    // Remove o item do array carrinho pelo seu índice
+    if (indiceItem !== -1) {
+        carrinho.splice(indiceItem, 1);
+    }
+
+    // Remove o item do DOM
+    todosItens.removeChild(item);
+
+    // Atualiza a quantidade de itens no carrinho
+    let spanQuantidadeItens = document.querySelector("#quantidade-item");
+    atualizarQtdItemCarrinho(spanQuantidadeItens);
+
+    // Atualiza o valor total do carrinho
+    valorTotal(todosItens);
+}
+console.log(carrinho);
