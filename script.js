@@ -50,7 +50,7 @@ class newItem {
 
     valorTotal() {
         this.total = this.precoFixo * this.quantidade;
-        this.total.toFixed(2)
+        this.total
     }
 
     addQuantidade() {
@@ -180,7 +180,7 @@ function enviarPedido() {
         return (`Nome: ${item.nome} Quantidade: (${item.quantidade}) Preço: R$${item.total} |`)
     }).join("\n")
     const mensagem = encodeURIComponent(itensCarrinho)
-    const celular = "7381474362"
+    const celular = "77981564444"
 
     window.open(`https://wa.me/${celular}?text=${mensagem} Endereço: ${endereco}`, "_blank")
 }
