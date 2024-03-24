@@ -3,6 +3,7 @@ const fecharCarrinho = document.querySelector("#fechar-carrinho").addEventListen
 const finalizarPedido = document.querySelector("#finalizar-pedido").addEventListener("click", fazerPedido)
 const cart = document.querySelector("#cart")
 const erro = document.querySelector("#error")
+const btnFinalizarPedido = document.querySelector("#finalizar-pedido").addEventListener("click", enviarPedido)
 function showCart() {
     cart.classList.remove("hide-cart")
     cart.classList.add("cart-active")
@@ -22,7 +23,7 @@ function fazerPedido() {
 }
 
 let carrinho = []
-
+//Mostra a quantidade de itens no carrinho
 function qtdItemCarrinho(span){
     let totalItens = 1
         for(element of carrinho){
@@ -30,6 +31,7 @@ function qtdItemCarrinho(span){
         }
     span.textContent = `${totalItens}`
 }
+//Atualiza a quantidade de itens no carrinho
 function atualizarQtdItemCarrinho(span) {
     let totalItens = 0
     for(element of carrinho){
@@ -97,7 +99,7 @@ function verificarListaDeItens(item) {
         }
 })
 }
-
+//cria o html no modal do carrinho
 function criarHTML(item){
     
     const addHTML = document.querySelector("#itens")
@@ -153,23 +155,31 @@ function removerItem(){
     const todosItens = document.querySelector("#itens");
     let item = this.parentNode;
     let nomeItem = item.querySelector(".nome-item").textContent;
-
-    // Encontra o índice do item no array carrinho
     let indiceItem = carrinho.findIndex(itemCarrinho => itemCarrinho.nome === nomeItem);
-
-    // Remove o item do array carrinho pelo seu índice
     if (indiceItem !== -1) {
         carrinho.splice(indiceItem, 1);
     }
-
-    // Remove o item do DOM
     todosItens.removeChild(item);
-
-    // Atualiza a quantidade de itens no carrinho
     let spanQuantidadeItens = document.querySelector("#quantidade-item");
     atualizarQtdItemCarrinho(spanQuantidadeItens);
 
-    // Atualiza o valor total do carrinho
     valorTotal(todosItens);
 }
-console.log(carrinho);
+
+function enviarPedido() {
+    const endereco = document.querySelector("#endereco").value
+    if(carrinho.length === 0){
+        return
+    }
+    if(endereco.length === 0){
+        fazerPedido()
+        return
+    }
+    const itensCarrinho = carrinho.map(item => {
+        return (`Nome: ${item.nome} Quantidade: (${item.quantidade}) Preço: R$${item.total.toFixed(2)} |`)
+    }).join("\n")
+    const mensagem = encodeURIComponent(itensCarrinho)
+    const celular = "7381474362"
+
+    window.open(`https://wa.me/${celular}?text=${mensagem} Endereço: ${endereco}`, "_blank")
+}
