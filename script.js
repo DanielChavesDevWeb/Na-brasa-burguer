@@ -50,6 +50,7 @@ class newItem {
 
     valorTotal() {
         this.total = this.precoFixo * this.quantidade;
+        this.total.toFixed(2)
     }
 
     addQuantidade() {
@@ -176,7 +177,7 @@ function enviarPedido() {
         return
     }
     const itensCarrinho = carrinho.map(item => {
-        return (`Nome: ${item.nome} Quantidade: (${item.quantidade}) Preço: R$${item.total.toFixed(2)} |`)
+        return (`Nome: ${item.nome} Quantidade: (${item.quantidade}) Preço: R$${item.total} |`)
     }).join("\n")
     const mensagem = encodeURIComponent(itensCarrinho)
     const celular = "7381474362"
