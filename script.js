@@ -180,7 +180,7 @@ function enviarPedido() {
         return (`Nome: ${item.nome} Quantidade: (${item.quantidade}) Preço: R$${item.total} |`)
     }).join("\n")
     const mensagem = encodeURIComponent(itensCarrinho)
-    const celular = "77981564444"
+    const celular = "7781564444"
 
     window.open(`https://wa.me/${celular}?text=${mensagem} Endereço: ${endereco}`, "_blank")
 }
