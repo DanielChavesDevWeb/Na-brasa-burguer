@@ -58,6 +58,12 @@ class newItem {
     }
 }
 
+class newCombo extends newItem{
+    constructor(nome, precoFixo, descricao){
+        super(nome, precoFixo),
+        this.descricao = descricao
+    }
+}
 const criarItem = document.querySelectorAll(".add-item-cart")
 
 criarItem.forEach(itemClicado => {
@@ -149,7 +155,6 @@ function valorTotal(itens){
         total += valorNumerico;
     }
     document.querySelector("#total-carrinho").innerText = `${total.toFixed(2)}`
-    console.log(carrinho);
 }
 
 function removerItem(){
@@ -177,7 +182,8 @@ function enviarPedido() {
         return
     }
     const itensCarrinho = carrinho.map(item => {
-        return (`Nome: ${item.nome} Quantidade: (${item.quantidade}) Preço: R$${item.total} |`)
+        let total = Number(item.total)
+        return (`Nome: ${item.nome} Quantidade: (${item.quantidade}) Preço: R$${total.toFixed(2)} |`)
     }).join("\n")
     const mensagem = encodeURIComponent(itensCarrinho)
     const celular = "7781564444"
