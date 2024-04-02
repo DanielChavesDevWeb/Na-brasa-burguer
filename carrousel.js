@@ -108,7 +108,7 @@ function criarComboHtml(){
 
     hNome.innerText = `${promo.nome}`
     spanQuantidade.innerText = `${promo.quantidade}`
-    hPreco.innerText = `R$ ${promo.total}`
+    hPreco.innerText = `R$ ${promo.total.toFixed(2)}`
 
 
     addHTML.appendChild(divContainer)
