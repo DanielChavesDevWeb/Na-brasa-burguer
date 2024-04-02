@@ -2,5 +2,18 @@
     width: 220px;
 }
 #numCasa{
-    width: 108px;
+    width: 107px;
+}
+#voltar-carrinho{
+    border: none;
+    background-color: transparent;
+}
+#fim-pedido{
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: rgb(0, 173, 0);
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
