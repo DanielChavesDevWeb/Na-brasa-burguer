@@ -64,7 +64,7 @@ function enviarMsg(info){
     if(verificar){
         const cartItens = carrinho.map((itens) => {
             return (
-                `*${itens.nome}* *Quantidade:* (${itens.quantidade}) *Preço:* R$${itens.total} |`
+                `*${itens.nome}* Quantidade: *(${itens.quantidade})* Preço: *R$${itens.total}* | `
             )
         }).join("")
 
