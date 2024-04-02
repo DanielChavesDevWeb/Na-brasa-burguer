@@ -57,7 +57,7 @@ function abrirModal(img, combo) {
     containerCombo.classList.add("cart-active")
     imgCombo.src = `${img}`
     nomeCombo.textContent = combo.descricao
-    precoCombo.textContent = combo.precoFixo
+    precoCombo.textContent = combo.precoFixo.toFixed(2)
 }
 
 function criarComboCarrinho() {

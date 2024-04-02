@@ -38,7 +38,7 @@ header{
 }
 #comboSelected{
     background-color: #ffffff;
-    width: 400px;
+    width: 350px;
     height: 500px;
     border-radius: 5px;
     box-shadow: 1px 2px 30px rgb(39, 39, 39);
@@ -105,7 +105,7 @@ header{
     max-height: 80vh;
     overflow-y: auto;
     background-color: #ffffff;
-    width: 400px;
+    width: 350px;
     border-radius: 5px;
     box-shadow: 1px 2px 30px rgb(39, 39, 39);
     opacity: 100%;

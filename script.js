@@ -1,9 +1,9 @@
 const mostrarCarrinho = document.querySelector("#show-cart").addEventListener("click", showCart)
 const fecharCarrinho = document.querySelector("#fechar-carrinho").addEventListener("click", closeCart)
-const finalizarPedido = document.querySelector("#finalizar-pedido").addEventListener("click", fazerPedido)
 const cart = document.querySelector("#cart")
 const erro = document.querySelector("#error")
 const btnFinalizarPedido = document.querySelector("#finalizar-pedido").addEventListener("click", enviarPedido)
+
 function showCart() {
     cart.classList.remove("hide-cart")
     cart.classList.add("cart-active")
@@ -11,15 +11,6 @@ function showCart() {
 function closeCart() {
     cart.classList.remove("cart-active")
     cart.classList.add("hide-cart")
-}
-function fazerPedido() {
-    let endereco = document.querySelector("#endereco").value
-    if (endereco.length < 1) {
-        erro.classList.remove("d-none")
-    }
-    else {
-        erro.classList.add("d-none")
-    }
 }
 
 let carrinho = []
@@ -108,7 +99,6 @@ function verificarListaDeItens(item) {
 }
 //cria o html no modal do carrinho
 function criarHTML(item){
-    
     const addHTML = document.querySelector("#itens")
     let divContainer = document.createElement("div")
     let divText = document.createElement("div")
@@ -137,14 +127,16 @@ function criarHTML(item){
     spanQuantidade.innerText = `${item.quantidade}`
     hPreco.innerText = `R$ ${item.total}`
 
-
     addHTML.appendChild(divContainer)
+    
 
     const btnRemoverItem = document.querySelectorAll(".remove-item")
     btnRemoverItem.forEach(element => {
     element.addEventListener("click", removerItem)
 })
 }
+
+let totalCarrinho = document.querySelector("#total-carrinho")
 
 function valorTotal(itens){
     let total = 0;
@@ -154,7 +146,7 @@ function valorTotal(itens){
         let valorNumerico = parseFloat(textoTotal.replace("R$", "").trim()); 
         total += valorNumerico;
     }
-    document.querySelector("#total-carrinho").innerText = `${total.toFixed(2)}`
+    totalCarrinho.innerText = `${total.toFixed(2)}`
 }
 
 function removerItem(){
@@ -173,20 +165,27 @@ function removerItem(){
 }
 
 function enviarPedido() {
-    const endereco = document.querySelector("#endereco").value
     if(carrinho.length === 0){
+        alert("Seu carrinho está vazio")
         return
     }
-    if(endereco.length === 0){
-        fazerPedido()
-        return
-    }
-    const itensCarrinho = carrinho.map(item => {
-        let total = Number(item.total)
-        return (`Nome: ${item.nome} Quantidade: (${item.quantidade}) Preço: R$${total.toFixed(2)} |`)
-    }).join("\n")
-    const mensagem = encodeURIComponent(itensCarrinho)
-    const celular = "7781564444"
+    closeCart()
+    abrirInfo()
+}
 
-    window.open(`https://wa.me/${celular}?text=${mensagem} Endereço: ${endereco}`, "_blank")
+function checarRestauranteAberto(){
+    const data = new Date()
+    const hora = data.getHours()
+    return hora >= 18 && hora < 23 
+}
+
+const spanItem = document.querySelector(".abertura")
+const estaAberto = checarRestauranteAberto()
+
+if(estaAberto){
+    spanItem.classList.remove("bg-danger")
+    spanItem.style.backgroundColor = "rgb(0, 173, 0)"
+}else{
+    spanItem.classList.add("bg-danger")
+    spanItem.style.backgroundColor = ""
 }
