@@ -91,16 +91,24 @@ function criarComboHtml(){
     hPreco.classList.add("total-item")
     let pQuantidade = document.createElement("p")
     let spanQuantidade = document.createElement("span")
-    spanQuantidade.classList.add("quantidade")
+    spanQuantidade.classList.add("quantidade", "p-2")
     let btnRemove = document.createElement("button")
-    
+    let btnMenos = document.createElement("span")
+    btnMenos.addEventListener("click", subQuantidadeItem)
+    let btnMais = document.createElement("span")
+    btnMais.addEventListener("click", addQuantidadeItem)
+    btnMais.innerHTML = `<i class="fa-solid fa-plus"></i>`
+    btnMenos.innerHTML = `<i class="fa-solid fa-minus"></i>`
+
     divContainer.classList.add("d-flex", "justify-content-between")
     divContainer.appendChild(divText)
     divContainer.appendChild(btnRemove)
     divText.appendChild(hNome)
     divText.appendChild(pQuantidade)
     pQuantidade.innerText = "Quantidade: "
+    pQuantidade.appendChild(btnMenos)
     pQuantidade.appendChild(spanQuantidade)
+    pQuantidade.appendChild(btnMais)
     divText.classList.add("resumo-itens")
     divText.appendChild(hPreco)
     btnRemove.innerText = "remover"
