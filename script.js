@@ -14,22 +14,6 @@ function closeCart() {
 }
 
 let carrinho = []
-//Mostra a quantidade de itens no carrinho
-function qtdItemCarrinho(span){
-    let totalItens = 1
-        for(element of carrinho){
-            totalItens += element.quantidade
-        }
-    span.textContent = `${totalItens}`
-}
-//Atualiza a quantidade de itens no carrinho
-function atualizarQtdItemCarrinho(span) {
-    let totalItens = 0
-    for(element of carrinho){
-        totalItens += element.quantidade
-    }
-    span.textContent = `${totalItens}`
-}
 
 class newItem {
     constructor(nome, precoFixo) {
@@ -46,6 +30,10 @@ class newItem {
 
     addQuantidade() {
         this.quantidade += 1
+    }
+
+    subQuantidade(){
+        this.quantidade -= 1
     }
 }
 
@@ -67,7 +55,6 @@ function criarItemCarrinho() {
     let precoFixo = item.querySelector(".preco")
     let addItem = new newItem(nome.textContent, precoFixo.textContent)
     let spanQuantidadeItens = document.querySelector("#quantidade-item");
-    qtdItemCarrinho(spanQuantidadeItens)
     let itemExistente = carrinho.find((element) => element.nome === nome.textContent)
     let addSucess = document.querySelector(".addSucess")
         addSucess.classList.remove("hide-cart")
@@ -84,19 +71,9 @@ function criarItemCarrinho() {
         criarHTML(addItem)
         valorTotal(divItens)
     }
+    qtdItemCarrinho(spanQuantidadeItens)
 }
 
-function verificarListaDeItens(item) {
-    const divItens = document.querySelector("#itens")
-    let itens = divItens.querySelectorAll(".resumo-itens .nome-item")
-    itens.forEach(element => {
-        if(element.textContent == item.nome){
-            element.parentNode.querySelector(".quantidade").innerText = `${item.quantidade}`
-            element.parentNode.querySelector(".total-item").innerText = `${item.total.toFixed(2)}`
-            valorTotal(divItens)
-        }
-})
-}
 //cria o html no modal do carrinho
 function criarHTML(item){
     const addHTML = document.querySelector("#itens")
@@ -108,16 +85,24 @@ function criarHTML(item){
     hPreco.classList.add("total-item")
     let pQuantidade = document.createElement("p")
     let spanQuantidade = document.createElement("span")
-    spanQuantidade.classList.add("quantidade")
+    spanQuantidade.classList.add("quantidade", "p-2")
     let btnRemove = document.createElement("button")
-    
+    let btnMenos = document.createElement("span")
+    btnMenos.addEventListener("click", subQuantidadeItem)
+    let btnMais = document.createElement("span")
+    btnMais.addEventListener("click", addQuantidadeItem)
+    btnMais.innerHTML = `<i class="fa-solid fa-plus"></i>`
+    btnMenos.innerHTML = `<i class="fa-solid fa-minus"></i>`
+
     divContainer.classList.add("d-flex", "justify-content-between")
     divContainer.appendChild(divText)
     divContainer.appendChild(btnRemove)
     divText.appendChild(hNome)
     divText.appendChild(pQuantidade)
     pQuantidade.innerText = "Quantidade: "
+    pQuantidade.appendChild(btnMenos)
     pQuantidade.appendChild(spanQuantidade)
+    pQuantidade.appendChild(btnMais)
     divText.classList.add("resumo-itens")
     divText.appendChild(hPreco)
     btnRemove.innerText = "remover"
@@ -133,6 +118,44 @@ function criarHTML(item){
     const btnRemoverItem = document.querySelectorAll(".remove-item")
     btnRemoverItem.forEach(element => {
     element.addEventListener("click", removerItem)
+})
+}
+
+function subQuantidadeItem(){
+    let spanQuantidadeItens = document.querySelector("#quantidade-item");
+    let nomeItem = this.parentNode.parentNode.querySelector("h6").textContent
+    let indexDoItem = carrinho.findIndex(objeto => objeto.nome === nomeItem);
+    let itemDoCarrinho = carrinho[indexDoItem]
+    if(itemDoCarrinho.quantidade > 1){
+        itemDoCarrinho.subQuantidade()
+        itemDoCarrinho.valorTotal()
+        verificarListaDeItens(itemDoCarrinho)
+        qtdItemCarrinho(spanQuantidadeItens)
+    }
+}
+
+function addQuantidadeItem(){
+    let spanQuantidadeItens = document.querySelector("#quantidade-item");
+    let nomeItem = this.parentNode.parentNode.querySelector("h6").textContent
+    let indexDoItem = carrinho.findIndex(objeto => objeto.nome === nomeItem);
+    let itemDoCarrinho = carrinho[indexDoItem]
+    if(itemDoCarrinho.quantidade >= 1){
+        itemDoCarrinho.addQuantidade()
+        itemDoCarrinho.valorTotal()
+        verificarListaDeItens(itemDoCarrinho)
+        qtdItemCarrinho(spanQuantidadeItens)
+    }
+}
+
+function verificarListaDeItens(item) {
+    const divItens = document.querySelector("#itens")
+    let itens = divItens.querySelectorAll(".resumo-itens .nome-item")
+    itens.forEach(element => {
+        if(element.textContent == item.nome){
+            element.parentNode.querySelector(".quantidade").innerText = `${item.quantidade}`
+            element.parentNode.querySelector(".total-item").innerText = `${item.total.toFixed(2)}`
+            valorTotal(divItens)
+        }
 })
 }
 
@@ -162,6 +185,23 @@ function removerItem(){
     atualizarQtdItemCarrinho(spanQuantidadeItens);
 
     valorTotal(todosItens);
+}
+
+//Mostra a quantidade de itens no carrinho
+function qtdItemCarrinho(span){
+    let totalItens = 0
+        for(element of carrinho){
+            totalItens += element.quantidade
+        }
+    span.textContent = `${totalItens}`
+}
+//Atualiza a quantidade de itens no carrinho
+function atualizarQtdItemCarrinho(span) {
+    let totalItens = 0
+    for(element of carrinho){
+        totalItens += element.quantidade
+    }
+    span.textContent = `${totalItens}`
 }
 
 function enviarPedido() {

@@ -62,7 +62,6 @@ function abrirModal(img, combo) {
 
 function criarComboCarrinho() {
     let spanQuantidadeItens = document.querySelector("#quantidade-item");
-    qtdItemCarrinho(spanQuantidadeItens)
     let itemExistente = carrinho.find((element) => element.nome === promo.nome)
     let addSucess = document.querySelector(".addSucess")
         addSucess.classList.remove("hide-cart")
@@ -79,6 +78,7 @@ function criarComboCarrinho() {
         criarComboHtml()
         valorTotal(divItens)
     }
+    qtdItemCarrinho(spanQuantidadeItens)
 }
 
 function criarComboHtml(){
